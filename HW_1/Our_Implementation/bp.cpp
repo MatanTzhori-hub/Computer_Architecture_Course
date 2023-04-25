@@ -9,7 +9,6 @@ struct BTBEntry
 	uint32_t tag;
 	uint32_t target;
 	uint8_t  history;
-	uint8_t  state;
 };
 
 class Predictor
@@ -23,7 +22,7 @@ class Predictor
 	bool isGlobalTable;
 	int Shared;
 
-	BTBEntry* BTB;
+	BTBEntry** BTB;
 	uint8_t* smArray;	// for lshare / gshare, only relevant for global state-machine
 	uint8_t  globalHistory;
 	uint8_t  globalState;
@@ -54,7 +53,10 @@ Predictor::Predictor(unsigned btbSize, unsigned historySize, unsigned tagSize, u
 				isGlobalTable(isGlobalTable),
 				Shared(Shared)
 			{
-				this->BTB = new BTBEntry[btbSize];
+				this->BTB = new BTBEntry*[btbSize];
+				for(int i=0;i<btbSize;i++){
+					this->BTB[i] = nullptr;
+				}
 				this->smArray = new uint8_t[(int)pow(2,historySize)];
 				this->globalHistory = 0;
 				this->globalState = fsmState;
@@ -74,7 +76,12 @@ int parsePCtoIndex(uint32_t pc, unsigned btbSize){
 }
 
 int parsePCtoTag(uint32_t pc, unsigned btbSize, unsigned tagSize){
-	return 0;
+	int nbits = (int)log2(btbSize);
+	uint32_t mask = 0xFFFFFFFF;
+	mask = mask >> (32-tagSize);
+	pc = pc >> (2+ nbits);
+	uint32_t tag = mask & pc;
+	return tag;
 }
 
 int BP_init(unsigned btbSize, unsigned historySize, unsigned tagSize, unsigned fsmState,
@@ -103,8 +110,32 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 	Predictor& predictor = Predictor::getInstance(0,0,0,0,0,0,0);
 	int index = parsePCtoIndex(pc, predictor.btbSize);
 	int tag = parsePCtoTag(pc, predictor.btbSize, predictor.tagSize);
+	BTBEntry* entry = predictor.BTB[index];
+	
+	
+	if(predictor.isGlobalHist == false && predictor.isGlobalTable == false){
 
-	return false;
+		if(entry == nullptr || entry->tag!=tag){ // doesn't exist in BTB or same entry with diff tags
+			predictor.BTB[index] = new BTBEntry;
+			entry = predictor.BTB[index];
+			entry->history = 0;
+			entry->state = predictor.fsmState;
+			entry->tag = tag;
+			entry->target = pc+4;
+			*dst = pc+4;
+			return false;	
+		}
+		if(entry->state == 0 || entry->state == 1) {// exist in BTB but state is NT
+			*dst = pc+4;
+			return false;
+		}
+		else{ // exist in BTB but state is T
+			*dst = entry->target; 
+			return true;
+		}
+		return false;
+	}
+
 }
 
 void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
