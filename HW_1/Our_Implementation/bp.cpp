@@ -9,6 +9,7 @@ struct BTBEntry
 	uint32_t tag;
 	uint32_t target;
 	uint8_t  history;
+	uint8_t* smArray;
 };
 
 class Predictor
@@ -25,7 +26,6 @@ class Predictor
 	BTBEntry** BTB;
 	uint8_t* smArray;	// for lshare / gshare, only relevant for global state-machine
 	uint8_t  globalHistory;
-	uint8_t  globalState;
 
 	Predictor(unsigned btbSize, unsigned historySize, unsigned tagSize, unsigned fsmState,
 			bool isGlobalHist, bool isGlobalTable, int Shared);
@@ -54,12 +54,14 @@ Predictor::Predictor(unsigned btbSize, unsigned historySize, unsigned tagSize, u
 				Shared(Shared)
 			{
 				this->BTB = new BTBEntry*[btbSize];
-				for(int i=0;i<btbSize;i++){
+				for(unsigned i = 0; i < btbSize; i++){
 					this->BTB[i] = nullptr;
 				}
 				this->smArray = new uint8_t[(int)pow(2,historySize)];
+				for(int j =0; j < (int)pow(2,historySize); j++){
+					this->smArray[j] = fsmState;
+				}
 				this->globalHistory = 0;
-				this->globalState = fsmState;
 			}
 
 Predictor::~Predictor(){
@@ -82,6 +84,21 @@ int parsePCtoTag(uint32_t pc, unsigned btbSize, unsigned tagSize){
 	pc = pc >> (2+ nbits);
 	uint32_t tag = mask & pc;
 	return tag;
+}
+
+int ParseHistorytoIndexSM(uint8_t history, unsigned historySize, int share, uint32_t pc){
+	uint8_t mask = 0xFF >> (8 - historySize);
+	if(share == 1){
+		uint8_t pc_8b = (uint8_t)(pc >> 2);
+		history = history ^ pc_8b;
+	}
+	else if(share == 2){
+		uint8_t pc_8b = (uint8_t)(pc >> 16);
+		history = history ^ pc_8b;
+	}
+
+	int index = history & mask;
+	return index;
 }
 
 int BP_init(unsigned btbSize, unsigned historySize, unsigned tagSize, unsigned fsmState,
@@ -108,37 +125,99 @@ int BP_init(unsigned btbSize, unsigned historySize, unsigned tagSize, unsigned f
 
 bool BP_predict(uint32_t pc, uint32_t *dst){
 	Predictor& predictor = Predictor::getInstance(0,0,0,0,0,0,0);
-	int index = parsePCtoIndex(pc, predictor.btbSize);
-	int tag = parsePCtoTag(pc, predictor.btbSize, predictor.tagSize);
+	unsigned int index = parsePCtoIndex(pc, predictor.btbSize);
+	unsigned int tag = parsePCtoTag(pc, predictor.btbSize, predictor.tagSize);
 	BTBEntry* entry = predictor.BTB[index];
 	
+	if(entry == nullptr || entry->tag != tag){ // doesn't exist in BTB or same entry with diff tags
+		*dst = pc+4;
+		return false;	
+	}
 	
-	if(predictor.isGlobalHist == false && predictor.isGlobalTable == false){
-
-		if(entry == nullptr || entry->tag!=tag){ // doesn't exist in BTB or same entry with diff tags
-			predictor.BTB[index] = new BTBEntry;
-			entry = predictor.BTB[index];
-			entry->history = 0;
-			entry->state = predictor.fsmState;
-			entry->tag = tag;
-			entry->target = pc+4;
-			*dst = pc+4;
-			return false;	
-		}
-		if(entry->state == 0 || entry->state == 1) {// exist in BTB but state is NT
-			*dst = pc+4;
-			return false;
-		}
-		else{ // exist in BTB but state is T
-			*dst = entry->target; 
-			return true;
-		}
-		return false;
+	// Decide if local history or global history
+	int history;
+	if(predictor.isGlobalHist == false){
+		history = entry->history;
+	}
+	else{
+		history = predictor.globalHistory;
 	}
 
+	// Claculate index in smArray based on history
+	int smIndx = ParseHistorytoIndexSM(history, predictor.historySize, predictor.Shared, pc);
+	int curState;
+	if(predictor.isGlobalTable == true){
+		curState = predictor.smArray[smIndx];
+	}
+	else{
+		curState = entry->smArray[smIndx];
+	}
+
+	if(curState == 0 || curState == 1) {// exist in BTB but state is NT
+		*dst = pc+4;
+		return false;
+	}
+	else{ // exist in BTB but state is T
+		*dst = entry->target; 
+		return true;
+	}
+		return false;
 }
 
 void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
+	Predictor& predictor = Predictor::getInstance(0,0,0,0,0,0,0);
+	unsigned int index = parsePCtoIndex(pc, predictor.btbSize);
+	unsigned int tag = parsePCtoTag(pc, predictor.btbSize, predictor.tagSize);
+	BTBEntry* entry = predictor.BTB[index];
+
+	if(entry == nullptr || entry->tag != tag){ // doesn't exist in BTB or same entry with diff tags
+		if(entry == nullptr){
+			predictor.BTB[index] = new BTBEntry();
+			entry = predictor.BTB[index];
+		}
+		entry->tag = tag;
+		entry->target = targetPc;
+		entry->history = 0;
+		if(predictor.isGlobalTable == false){
+			if(entry->smArray == nullptr){
+				entry->smArray = new uint8_t[(int)pow(2,predictor.historySize)];
+			}
+			for(int j =0; j < (int)pow(2,predictor.historySize); j++){
+				entry->smArray[j] = predictor.fsmState;
+			}
+		}
+		// Need to update the state machine according to the history index (depends if global or local history)
+	}
+	
+	// Decide if local history or global history
+	int history;
+	if(predictor.isGlobalHist == false){
+		history = entry->history;
+	}
+	else{
+		history = predictor.globalHistory;
+	}
+
+	// Claculate index in smArray based on history
+	int smIndx = ParseHistorytoIndexSM(history, predictor.historySize, predictor.Shared, pc);
+	// Update both histories
+	entry->history = entry->history << 1;
+	entry->history = (taken == 1) ? entry->history + 1 : entry->history; 
+	predictor.globalHistory = predictor.globalHistory << 1;
+	predictor.globalHistory = (taken == 1) ? predictor.globalHistory + 1 : predictor.globalHistory; 
+
+	uint8_t* curState = &entry->smArray[smIndx];
+	if(predictor.isGlobalTable == true){
+		curState = &predictor.smArray[smIndx];
+	}
+
+	if(taken == 1 && *curState != 3) {// exist in BTB but state is NT
+		(*curState)++;
+	}
+	else if(taken == 0 && *curState != 0){ // exist in BTB but state is T
+		(*curState)--;
+	}
+
 	return;
 }
 
