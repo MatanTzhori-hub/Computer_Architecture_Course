@@ -27,6 +27,8 @@ class Predictor
 	uint8_t* smArray;	// for lshare / gshare, only relevant for global state-machine
 	uint8_t  globalHistory;
 
+	SIM_stats predictor_stats;
+
 	Predictor(unsigned btbSize, unsigned historySize, unsigned tagSize, unsigned fsmState,
 			bool isGlobalHist, bool isGlobalTable, int Shared);
 	~Predictor();
@@ -51,7 +53,8 @@ Predictor::Predictor(unsigned btbSize, unsigned historySize, unsigned tagSize, u
 				tagSize(tagSize),
 				isGlobalHist(isGlobalHist),
 				isGlobalTable(isGlobalTable),
-				Shared(Shared)
+				Shared(Shared),
+				predictor_stats()
 			{
 				this->BTB = new BTBEntry*[btbSize];
 				for(unsigned i = 0; i < btbSize; i++){
@@ -166,6 +169,8 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 
 void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	Predictor& predictor = Predictor::getInstance(0,0,0,0,0,0,0);
+	predictor.predictor_stats.br_num++;
+
 	unsigned int index = parsePCtoIndex(pc, predictor.btbSize);
 	unsigned int tag = parsePCtoTag(pc, predictor.btbSize, predictor.tagSize);
 	BTBEntry* entry = predictor.BTB[index];
@@ -206,9 +211,11 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	predictor.globalHistory = predictor.globalHistory << 1;
 	predictor.globalHistory = (taken == 1) ? predictor.globalHistory + 1 : predictor.globalHistory; 
 
-	uint8_t* curState = &entry->smArray[smIndx];
-	if(predictor.isGlobalTable == true){
-		curState = &predictor.smArray[smIndx];
+	uint8_t* curState;
+	if(predictor.isGlobalTable == false)
+		curState = &(entry->smArray[smIndx]);
+	else{
+		curState = &(predictor.smArray[smIndx]);
 	}
 
 	if(taken == 1 && *curState != 3) {// exist in BTB but state is NT
@@ -218,10 +225,48 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 		(*curState)--;
 	}
 
+	// Check with a metargel about the valid bit
+	if(taken == 0){ // not taken
+		if(pred_dst != pc + 4){
+			predictor.predictor_stats.flush_num++;
+		}
+	}
+	else{ // taken
+		if(pred_dst != targetPc){
+			predictor.predictor_stats.flush_num++;
+		}
+	}
+
 	return;
 }
 
 void BP_GetStats(SIM_stats *curStats){
+	Predictor& predictor = Predictor::getInstance(0,0,0,0,0,0,0);
+
+	if(predictor.isGlobalHist == false && predictor.isGlobalTable == false){
+		predictor.predictor_stats.size = predictor.btbSize * (1 + predictor.historySize + predictor.tagSize + 30 + 2*(int)pow(2, predictor.historySize));
+	}
+	else if(predictor.isGlobalHist == true && predictor.isGlobalTable == false){
+		predictor.predictor_stats.size = predictor.historySize + predictor.btbSize * (1 + predictor.tagSize + 30 + 2*(int)pow(2, predictor.historySize));
+	}
+	else if(predictor.isGlobalHist == false && predictor.isGlobalTable == true){
+		predictor.predictor_stats.size = 2*(int)pow(2, predictor.historySize) + predictor.btbSize * (1 + predictor.historySize + predictor.tagSize + 30);
+	}
+	else if(predictor.isGlobalHist == true && predictor.isGlobalTable == true){
+		predictor.predictor_stats.size = predictor.historySize + 2*(int)pow(2, predictor.historySize) + predictor.btbSize * (1 + predictor.tagSize + 30);
+	}
+
+	*curStats = predictor.predictor_stats;
+
+	if(predictor.isGlobalHist == false){
+		for(unsigned int i = 0; i < predictor.btbSize; i++){
+			delete(predictor.BTB[i]->smArray);
+			delete(predictor.BTB[i]);
+		}
+	}
+	delete(predictor.smArray);
+	delete(&predictor);
+
 	return;
 }
 
