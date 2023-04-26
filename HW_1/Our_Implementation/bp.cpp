@@ -68,7 +68,13 @@ Predictor::Predictor(unsigned btbSize, unsigned historySize, unsigned tagSize, u
 			}
 
 Predictor::~Predictor(){
-
+	if(this->isGlobalHist == false){
+		for(unsigned int i = 0; i < this->btbSize; i++){
+			delete(this->BTB[i]->smArray);
+			delete(this->BTB[i]);
+		}
+	}
+	delete(this->smArray);
 }
 
 int parsePCtoIndex(uint32_t pc, unsigned btbSize){
@@ -258,13 +264,6 @@ void BP_GetStats(SIM_stats *curStats){
 
 	*curStats = predictor.predictor_stats;
 
-	if(predictor.isGlobalHist == false){
-		for(unsigned int i = 0; i < predictor.btbSize; i++){
-			delete(predictor.BTB[i]->smArray);
-			delete(predictor.BTB[i]);
-		}
-	}
-	delete(predictor.smArray);
 	delete(&predictor);
 
 	return;
