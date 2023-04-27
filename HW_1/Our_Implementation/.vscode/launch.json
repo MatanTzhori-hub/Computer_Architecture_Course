@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/predictor",
             "cwd": "${workspaceFolder}",
-            "args": ["./input_examples/example3.trc"],
+            "args": ["./myexample1.trc"],
             "stopAtEntry": false,
             "environment": [],
             "externalConsole": false,

@@ -51,6 +51,7 @@ Predictor::Predictor(unsigned btbSize, unsigned historySize, unsigned tagSize, u
 				btbSize(btbSize),
 				historySize(historySize),
 				tagSize(tagSize),
+				fsmState(fsmState),
 				isGlobalHist(isGlobalHist),
 				isGlobalTable(isGlobalTable),
 				Shared(Shared),
@@ -70,10 +71,13 @@ Predictor::Predictor(unsigned btbSize, unsigned historySize, unsigned tagSize, u
 Predictor::~Predictor(){
 	if(this->isGlobalHist == false){
 		for(unsigned int i = 0; i < this->btbSize; i++){
-			delete(this->BTB[i]->smArray);
-			delete(this->BTB[i]);
+			if(this->BTB[i] != nullptr){
+				delete(this->BTB[i]->smArray);
+				delete(this->BTB[i]);
+			}
 		}
 	}
+	delete(this->BTB);
 	delete(this->smArray);
 }
 
