@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/predictor",
             "cwd": "${workspaceFolder}",
-            "args": ["./myexample1.trc"],
+            "args": ["./tests_itai_idan_CA_2.0/example44.trc"],
             "stopAtEntry": false,
             "environment": [],
             "externalConsole": false,

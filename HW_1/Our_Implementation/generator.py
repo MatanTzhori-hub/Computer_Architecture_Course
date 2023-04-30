@@ -1,7 +1,7 @@
 import random
 
 ## Define defaults
-btbSize = 4
+btbSize = 16
 historySize = 8
 tagSize = 14
 fsmState = 1
@@ -10,7 +10,7 @@ isGlobalTable = "global_tables"   # local_tables / global_tables
 Shared = "using_share_lsb"         # not_using_share / using_share_lsb / using_share_mid
 ## -----------------
 
-branches = ["0x1230", "0x87654", "0x4074", "0x3018", "0x157c", "0x24b0"]#
+branches = ["0x1230", "0x87654", "0x4074", "0x3018", "0x157c", "0x24f0"]#
 destinations = ["0x12300", "0x45678", "0x17044", "0x13408", "0x16a40", "0x20f8"]#
 taken = ["T" ,"N"]
 

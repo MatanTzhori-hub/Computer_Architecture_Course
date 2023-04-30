@@ -82,6 +82,14 @@ Predictor::~Predictor(){
 }
 
 int parsePCtoIndex(uint32_t pc, unsigned btbSize){
+	// When the BTB size is 1, we get that nbits = 0, and we need to shift 32 bits.
+	// This is an undefined behavior, and therefor, for that case we will return 0
+	// instead (there is only 1 entry in the BTB and its the cell 0).
+	if(btbSize == 1){
+		return 0;
+	}
+
+	// Otherwise, we calculate the mask.
 	int nbits = (int)log2(btbSize);
 	uint32_t mask = 0xFFFFFFFF;
 	mask = mask >> (32-nbits);
@@ -93,21 +101,26 @@ int parsePCtoIndex(uint32_t pc, unsigned btbSize){
 int parsePCtoTag(uint32_t pc, unsigned btbSize, unsigned tagSize){
 	int nbits = (int)log2(btbSize);
 	uint32_t mask = 0xFFFFFFFF;
+	if(tagSize == 0){
+		return 0;
+	}
+
 	mask = mask >> (32-tagSize);
-	pc = pc >> (2+ nbits);
+	pc = pc >> (2 + nbits);
 	uint32_t tag = mask & pc;
 	return tag;
 }
 
-int ParseHistorytoIndexSM(uint8_t history, unsigned historySize, int share, uint32_t pc){
+int ParseHistorytoIndexSM(uint8_t history, unsigned historySize, int share, uint32_t pc, bool isGlobalTables){
 	uint8_t mask = 0xFF >> (8 - historySize);
-	if(share == 1){
+	
+	if(isGlobalTables && share == 1){
 		uint8_t pc_8b = (uint8_t)(pc >> 2);
-		history = history ^ pc_8b;
+		history = (history & mask) ^ (pc_8b & mask);
 	}
-	else if(share == 2){
+	else if(isGlobalTables && share == 2){
 		uint8_t pc_8b = (uint8_t)(pc >> 16);
-		history = history ^ pc_8b;
+		history = (history & mask) ^ (pc_8b & mask);
 	}
 
 	int index = history & mask;
@@ -141,6 +154,13 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 	unsigned int index = parsePCtoIndex(pc, predictor.btbSize);
 	unsigned int tag = parsePCtoTag(pc, predictor.btbSize, predictor.tagSize);
 	BTBEntry* entry = predictor.BTB[index];
+
+	if(pc == 0xd29ec){
+		pc = 0xd29ec;
+	}
+	if(pc == 0xd4fc){
+		pc = 0xd4fc;
+	}
 	
 	if(entry == nullptr || entry->tag != tag){ // doesn't exist in BTB or same entry with diff tags
 		*dst = pc+4;
@@ -157,7 +177,7 @@ bool BP_predict(uint32_t pc, uint32_t *dst){
 	}
 
 	// Claculate index in smArray based on history
-	int smIndx = ParseHistorytoIndexSM(history, predictor.historySize, predictor.Shared, pc);
+	int smIndx = ParseHistorytoIndexSM(history, predictor.historySize, predictor.Shared, pc, predictor.isGlobalTable);
 	int curState;
 	if(predictor.isGlobalTable == true){
 		curState = predictor.smArray[smIndx];
@@ -205,7 +225,7 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	}
 	
 	// Decide if local history or global history
-	int history;
+	uint8_t history;
 	if(predictor.isGlobalHist == false){
 		history = entry->history;
 	}
@@ -214,12 +234,17 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 	}
 
 	// Claculate index in smArray based on history
-	int smIndx = ParseHistorytoIndexSM(history, predictor.historySize, predictor.Shared, pc);
+	int smIndx = ParseHistorytoIndexSM(history, predictor.historySize, predictor.Shared, pc, predictor.isGlobalTable);
+
+	uint8_t hist_mask = 0xFF >> (8 - predictor.historySize);
+
 	// Update both histories
 	entry->history = entry->history << 1;
 	entry->history = (taken == 1) ? entry->history + 1 : entry->history; 
+	entry->history = entry->history & hist_mask;
 	predictor.globalHistory = predictor.globalHistory << 1;
 	predictor.globalHistory = (taken == 1) ? predictor.globalHistory + 1 : predictor.globalHistory; 
+	predictor.globalHistory = predictor.globalHistory & hist_mask;
 
 	uint8_t* curState;
 	if(predictor.isGlobalTable == false)
