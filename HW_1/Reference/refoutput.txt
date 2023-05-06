@@ -1,0 +1,99 @@
+Files tests_itai_idan_CA_2.0/example1.out and tests_itai_idan_CA_2.0/ref_output_example1.out are identical
+Files tests_itai_idan_CA_2.0/example2.out and tests_itai_idan_CA_2.0/ref_output_example2.out are identical
+Files tests_itai_idan_CA_2.0/example3.out and tests_itai_idan_CA_2.0/ref_output_example3.out are identical
+Files tests_itai_idan_CA_2.0/example4.out and tests_itai_idan_CA_2.0/ref_output_example4.out are identical
+Files tests_itai_idan_CA_2.0/example5.out and tests_itai_idan_CA_2.0/ref_output_example5.out are identical
+Files tests_itai_idan_CA_2.0/example6.out and tests_itai_idan_CA_2.0/ref_output_example6.out are identical
+Files tests_itai_idan_CA_2.0/example7.out and tests_itai_idan_CA_2.0/ref_output_example7.out are identical
+Files tests_itai_idan_CA_2.0/example8.out and tests_itai_idan_CA_2.0/ref_output_example8.out are identical
+Files tests_itai_idan_CA_2.0/example9.out and tests_itai_idan_CA_2.0/ref_output_example9.out are identical
+Files tests_itai_idan_CA_2.0/example10.out and tests_itai_idan_CA_2.0/ref_output_example10.out are identical
+Files tests_itai_idan_CA_2.0/example11.out and tests_itai_idan_CA_2.0/ref_output_example11.out are identical
+Files tests_itai_idan_CA_2.0/example12.out and tests_itai_idan_CA_2.0/ref_output_example12.out are identical
+Files tests_itai_idan_CA_2.0/example13.out and tests_itai_idan_CA_2.0/ref_output_example13.out are identical
+Files tests_itai_idan_CA_2.0/example14.out and tests_itai_idan_CA_2.0/ref_output_example14.out are identical
+Files tests_itai_idan_CA_2.0/example15.out and tests_itai_idan_CA_2.0/ref_output_example15.out are identical
+Files tests_itai_idan_CA_2.0/example16.out and tests_itai_idan_CA_2.0/ref_output_example16.out are identical
+Files tests_itai_idan_CA_2.0/example17.out and tests_itai_idan_CA_2.0/ref_output_example17.out differ
+Files tests_itai_idan_CA_2.0/example18.out and tests_itai_idan_CA_2.0/ref_output_example18.out are identical
+Files tests_itai_idan_CA_2.0/example19.out and tests_itai_idan_CA_2.0/ref_output_example19.out are identical
+Files tests_itai_idan_CA_2.0/example20.out and tests_itai_idan_CA_2.0/ref_output_example20.out are identical
+Files tests_itai_idan_CA_2.0/example21.out and tests_itai_idan_CA_2.0/ref_output_example21.out are identical
+Files tests_itai_idan_CA_2.0/example22.out and tests_itai_idan_CA_2.0/ref_output_example22.out are identical
+Files tests_itai_idan_CA_2.0/example23.out and tests_itai_idan_CA_2.0/ref_output_example23.out are identical
+Files tests_itai_idan_CA_2.0/example24.out and tests_itai_idan_CA_2.0/ref_output_example24.out are identical
+Files tests_itai_idan_CA_2.0/example25.out and tests_itai_idan_CA_2.0/ref_output_example25.out are identical
+Files tests_itai_idan_CA_2.0/example26.out and tests_itai_idan_CA_2.0/ref_output_example26.out are identical
+Files tests_itai_idan_CA_2.0/example27.out and tests_itai_idan_CA_2.0/ref_output_example27.out differ
+Files tests_itai_idan_CA_2.0/example28.out and tests_itai_idan_CA_2.0/ref_output_example28.out are identical
+Files tests_itai_idan_CA_2.0/example29.out and tests_itai_idan_CA_2.0/ref_output_example29.out are identical
+Files tests_itai_idan_CA_2.0/example30.out and tests_itai_idan_CA_2.0/ref_output_example30.out are identical
+Files tests_itai_idan_CA_2.0/example31.out and tests_itai_idan_CA_2.0/ref_output_example31.out are identical
+Files tests_itai_idan_CA_2.0/example32.out and tests_itai_idan_CA_2.0/ref_output_example32.out are identical
+Files tests_itai_idan_CA_2.0/example33.out and tests_itai_idan_CA_2.0/ref_output_example33.out are identical
+Files tests_itai_idan_CA_2.0/example34.out and tests_itai_idan_CA_2.0/ref_output_example34.out are identical
+Files tests_itai_idan_CA_2.0/example35.out and tests_itai_idan_CA_2.0/ref_output_example35.out are identical
+Files tests_itai_idan_CA_2.0/example36.out and tests_itai_idan_CA_2.0/ref_output_example36.out differ
+Files tests_itai_idan_CA_2.0/example37.out and tests_itai_idan_CA_2.0/ref_output_example37.out are identical
+Files tests_itai_idan_CA_2.0/example38.out and tests_itai_idan_CA_2.0/ref_output_example38.out differ
+Files tests_itai_idan_CA_2.0/example39.out and tests_itai_idan_CA_2.0/ref_output_example39.out are identical
+Files tests_itai_idan_CA_2.0/example40.out and tests_itai_idan_CA_2.0/ref_output_example40.out are identical
+Files tests_itai_idan_CA_2.0/example41.out and tests_itai_idan_CA_2.0/ref_output_example41.out differ
+Files tests_itai_idan_CA_2.0/example42.out and tests_itai_idan_CA_2.0/ref_output_example42.out are identical
+Files tests_itai_idan_CA_2.0/example43.out and tests_itai_idan_CA_2.0/ref_output_example43.out are identical
+Files tests_itai_idan_CA_2.0/example44.out and tests_itai_idan_CA_2.0/ref_output_example44.out differ
+Files tests_itai_idan_CA_2.0/example45.out and tests_itai_idan_CA_2.0/ref_output_example45.out are identical
+Files tests_itai_idan_CA_2.0/example46.out and tests_itai_idan_CA_2.0/ref_output_example46.out are identical
+Files tests_itai_idan_CA_2.0/example47.out and tests_itai_idan_CA_2.0/ref_output_example47.out are identical
+Files tests_itai_idan_CA_2.0/example48.out and tests_itai_idan_CA_2.0/ref_output_example48.out are identical
+Files tests_itai_idan_CA_2.0/example49.out and tests_itai_idan_CA_2.0/ref_output_example49.out differ
+Files tests_itai_idan_CA_2.0/example50.out and tests_itai_idan_CA_2.0/ref_output_example50.out are identical
+Files tests_itai_idan_CA_2.0/example51.out and tests_itai_idan_CA_2.0/ref_output_example51.out are identical
+Files tests_itai_idan_CA_2.0/example52.out and tests_itai_idan_CA_2.0/ref_output_example52.out are identical
+Files tests_itai_idan_CA_2.0/example53.out and tests_itai_idan_CA_2.0/ref_output_example53.out are identical
+Files tests_itai_idan_CA_2.0/example54.out and tests_itai_idan_CA_2.0/ref_output_example54.out are identical
+Files tests_itai_idan_CA_2.0/example55.out and tests_itai_idan_CA_2.0/ref_output_example55.out are identical
+Files tests_itai_idan_CA_2.0/example56.out and tests_itai_idan_CA_2.0/ref_output_example56.out differ
+Files tests_itai_idan_CA_2.0/example57.out and tests_itai_idan_CA_2.0/ref_output_example57.out are identical
+Files tests_itai_idan_CA_2.0/example58.out and tests_itai_idan_CA_2.0/ref_output_example58.out are identical
+Files tests_itai_idan_CA_2.0/example59.out and tests_itai_idan_CA_2.0/ref_output_example59.out are identical
+Files tests_itai_idan_CA_2.0/example60.out and tests_itai_idan_CA_2.0/ref_output_example60.out are identical
+Files tests_itai_idan_CA_2.0/example61.out and tests_itai_idan_CA_2.0/ref_output_example61.out are identical
+Files tests_itai_idan_CA_2.0/example62.out and tests_itai_idan_CA_2.0/ref_output_example62.out are identical
+Files tests_itai_idan_CA_2.0/example63.out and tests_itai_idan_CA_2.0/ref_output_example63.out are identical
+Files tests_itai_idan_CA_2.0/example64.out and tests_itai_idan_CA_2.0/ref_output_example64.out are identical
+Files tests_itai_idan_CA_2.0/example65.out and tests_itai_idan_CA_2.0/ref_output_example65.out are identical
+Files tests_itai_idan_CA_2.0/example66.out and tests_itai_idan_CA_2.0/ref_output_example66.out are identical
+Files tests_itai_idan_CA_2.0/example67.out and tests_itai_idan_CA_2.0/ref_output_example67.out are identical
+Files tests_itai_idan_CA_2.0/example68.out and tests_itai_idan_CA_2.0/ref_output_example68.out are identical
+Files tests_itai_idan_CA_2.0/example69.out and tests_itai_idan_CA_2.0/ref_output_example69.out are identical
+Files tests_itai_idan_CA_2.0/example70.out and tests_itai_idan_CA_2.0/ref_output_example70.out are identical
+Files tests_itai_idan_CA_2.0/example71.out and tests_itai_idan_CA_2.0/ref_output_example71.out are identical
+Files tests_itai_idan_CA_2.0/example72.out and tests_itai_idan_CA_2.0/ref_output_example72.out are identical
+Files tests_itai_idan_CA_2.0/example73.out and tests_itai_idan_CA_2.0/ref_output_example73.out are identical
+Files tests_itai_idan_CA_2.0/example74.out and tests_itai_idan_CA_2.0/ref_output_example74.out are identical
+Files tests_itai_idan_CA_2.0/example75.out and tests_itai_idan_CA_2.0/ref_output_example75.out are identical
+Files tests_itai_idan_CA_2.0/example76.out and tests_itai_idan_CA_2.0/ref_output_example76.out are identical
+Files tests_itai_idan_CA_2.0/example77.out and tests_itai_idan_CA_2.0/ref_output_example77.out are identical
+Files tests_itai_idan_CA_2.0/example78.out and tests_itai_idan_CA_2.0/ref_output_example78.out are identical
+Files tests_itai_idan_CA_2.0/example79.out and tests_itai_idan_CA_2.0/ref_output_example79.out are identical
+Files tests_itai_idan_CA_2.0/example80.out and tests_itai_idan_CA_2.0/ref_output_example80.out are identical
+Files tests_itai_idan_CA_2.0/example81.out and tests_itai_idan_CA_2.0/ref_output_example81.out are identical
+Files tests_itai_idan_CA_2.0/example82.out and tests_itai_idan_CA_2.0/ref_output_example82.out are identical
+Files tests_itai_idan_CA_2.0/example83.out and tests_itai_idan_CA_2.0/ref_output_example83.out are identical
+Files tests_itai_idan_CA_2.0/example84.out and tests_itai_idan_CA_2.0/ref_output_example84.out differ
+Files tests_itai_idan_CA_2.0/example85.out and tests_itai_idan_CA_2.0/ref_output_example85.out are identical
+Files tests_itai_idan_CA_2.0/example86.out and tests_itai_idan_CA_2.0/ref_output_example86.out are identical
+Files tests_itai_idan_CA_2.0/example87.out and tests_itai_idan_CA_2.0/ref_output_example87.out differ
+Files tests_itai_idan_CA_2.0/example88.out and tests_itai_idan_CA_2.0/ref_output_example88.out are identical
+Files tests_itai_idan_CA_2.0/example89.out and tests_itai_idan_CA_2.0/ref_output_example89.out are identical
+Files tests_itai_idan_CA_2.0/example90.out and tests_itai_idan_CA_2.0/ref_output_example90.out are identical
+Files tests_itai_idan_CA_2.0/example91.out and tests_itai_idan_CA_2.0/ref_output_example91.out are identical
+Files tests_itai_idan_CA_2.0/example92.out and tests_itai_idan_CA_2.0/ref_output_example92.out are identical
+Files tests_itai_idan_CA_2.0/example93.out and tests_itai_idan_CA_2.0/ref_output_example93.out are identical
+Files tests_itai_idan_CA_2.0/example94.out and tests_itai_idan_CA_2.0/ref_output_example94.out are identical
+Files tests_itai_idan_CA_2.0/example95.out and tests_itai_idan_CA_2.0/ref_output_example95.out are identical
+Files tests_itai_idan_CA_2.0/example96.out and tests_itai_idan_CA_2.0/ref_output_example96.out are identical
+Files tests_itai_idan_CA_2.0/example97.out and tests_itai_idan_CA_2.0/ref_output_example97.out are identical
+Files tests_itai_idan_CA_2.0/example98.out and tests_itai_idan_CA_2.0/ref_output_example98.out are identical
+Files tests_itai_idan_CA_2.0/example99.out and tests_itai_idan_CA_2.0/ref_output_example99.out are identical

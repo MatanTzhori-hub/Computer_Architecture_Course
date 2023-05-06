@@ -211,7 +211,6 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 			entry = predictor.BTB[index];
 		}
 		entry->tag = tag;
-		entry->target = targetPc;
 		entry->history = 0;
 		if(predictor.isGlobalTable == false){
 			if(entry->smArray == nullptr){
@@ -221,8 +220,8 @@ void BP_update(uint32_t pc, uint32_t targetPc, bool taken, uint32_t pred_dst){
 				entry->smArray[j] = predictor.fsmState;
 			}
 		}
-		// Need to update the state machine according to the history index (depends if global or local history)
 	}
+	entry->target = targetPc;
 	
 	// Decide if local history or global history
 	uint8_t history;
