@@ -80,26 +80,25 @@ int main(int argc, char **argv) {
 
 		simulator.executeCommand(operation, address);
 
-		// DEBUG - remove this line
-		cout << "operation: " << operation;
+		// // DEBUG - remove this line
+		// cout << "operation: " << operation;
 
-		string cutAddress = address.substr(2); // Removing the "0x" part of the address
+		// string cutAddress = address.substr(2); // Removing the "0x" part of the address
 
-		// DEBUG - remove this line
-		cout << ", address (hex)" << cutAddress;
+		// // DEBUG - remove this line
+		// cout << ", address (hex)" << cutAddress;
 
-		unsigned long int num = 0;
-		num = strtoul(cutAddress.c_str(), NULL, 16);
+		// unsigned long int num = 0;
+		// num = strtoul(cutAddress.c_str(), NULL, 16);
 
-		// DEBUG - remove this line
-		cout << " (dec) " << num << endl;
+		// // DEBUG - remove this line
+		// cout << " (dec) " << num << endl;
 
 	}
 
-	double L1MissRate;
-	double L2MissRate;
-	double avgAccTime;
-
+	double L1MissRate = simulator.calcMissRate(1);
+	double L2MissRate = simulator.calcMissRate(2);
+	double avgAccTime = simulator.calcAvgAccTime();
 
 
 	printf("L1miss=%.03f ", L1MissRate);

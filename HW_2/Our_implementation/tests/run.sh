@@ -15,14 +15,14 @@ MAGENTA=`tput setaf 5`
 CYAN=`tput setaf 6`
 WHITE=`tput setaf 7`
 
-echo "${CYAN}pray: "
+echo "${CYAN}Initiating testing: "
 for num in {1..20}
 do
     var=$(cat ./tests/example${num}_command)
     echo $var
-    ./cacheSim ${var} > ./tests/our_res.txt
-    diff ./tests/our_res.txt ./tests/example${num}_output
-    if cmp ./tests/our_res.txt ./tests/example${num}_output
+    ./cacheSim ./tests/example${num}_trace ${var} > ./output/our${num}_res.txt
+    diff ./output/our${num}_res.txt ./ref_results/example${num}_output
+    if cmp ./output/our${num}_res.txt ./ref_results/example${num}_output
         then
     echo "${GREEN}test ${num} passed";
         else
