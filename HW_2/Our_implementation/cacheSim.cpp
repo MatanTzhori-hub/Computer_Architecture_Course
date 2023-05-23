@@ -64,8 +64,8 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	CacheSimulator& simulator = CacheSimulator::getInstance(MemCyc, pow(2, BSize), WrAlloc, pow(2, L1Size), 
-												pow(2, L1Assoc), L1Cyc, pow(2, L2Size), pow(2, L2Assoc), L2Cyc);
+	CacheSimulator* simulator = CacheSimulator::getInstance(MemCyc, pow(2, BSize), WrAlloc, pow(2, L1Size), 
+												pow(2, L1Assoc), L1Cyc, pow(2, L2Size), pow(2, L2Assoc), L2Cyc, 0);
 
 	while (getline(file, line)) {
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
 			return 0;
 		}
 
-		simulator.executeCommand(operation, address);
+		simulator->executeCommand(operation, address);
 
 		// // DEBUG - remove this line
 		// cout << "operation: " << operation;
@@ -96,14 +96,16 @@ int main(int argc, char **argv) {
 
 	}
 
-	double L1MissRate = simulator.calcMissRate(1);
-	double L2MissRate = simulator.calcMissRate(2);
-	double avgAccTime = simulator.calcAvgAccTime();
-
+	double L1MissRate = simulator->calcMissRate(1);
+	double L2MissRate = simulator->calcMissRate(2);
+	double avgAccTime = simulator->calcAvgAccTime();
 
 	printf("L1miss=%.03f ", L1MissRate);
 	printf("L2miss=%.03f ", L2MissRate);
 	printf("AccTimeAvg=%.03f\n", avgAccTime);
+	
+	simulator = CacheSimulator::getInstance(MemCyc, pow(2, BSize), WrAlloc, pow(2, L1Size), 
+								pow(2, L1Assoc), L1Cyc, pow(2, L2Size), pow(2, L2Assoc), L2Cyc, 1);
 
 	return 0;
 }

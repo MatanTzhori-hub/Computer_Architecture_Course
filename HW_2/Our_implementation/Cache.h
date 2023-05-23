@@ -10,6 +10,8 @@ struct Cache_line{
 	unsigned tag;
     unsigned dirty;
     unsigned valid;
+
+    Cache_line() = default;
 };
 
 struct Cache_set{
@@ -42,20 +44,28 @@ class Cache{
 Cache::Cache(unsigned cache_size, unsigned cache_ways, unsigned cache_clocks, unsigned num_sets) : 
     cacheSize(cache_size), cacheWays(cache_ways), cacheCycles(cache_clocks), numSets(num_sets), Stats()
 {
-    cache_sets = new Cache_set[cache_size/cache_ways];
-    for(unsigned int i = 0; i < cache_size/cache_ways; ++i) {
+    cache_sets = new Cache_set[numSets];
+    for(unsigned i = 0; i < numSets; i++) {
         cache_sets[i].cache_lines = new Cache_line[cache_ways];
         cache_sets[i].priority = new unsigned[cache_ways];
+
+        for(unsigned j = 0; j < cache_ways; j++){
+            cache_sets[i].cache_lines[j].address = "";
+            cache_sets[i].cache_lines[j].dirty = 0;
+            cache_sets[i].cache_lines[j].tag = 0;
+            cache_sets[i].cache_lines[j].valid = 0;
+            cache_sets[i].priority[j] = 0;
+        }
         cache_sets[i].num_lines = 0;
     }
 }
 
 Cache::~Cache(){
-    for(unsigned int i = 0; i < cacheSize/cacheWays; ++i) {
-        delete cache_sets[i].cache_lines;
-        delete cache_sets[i].priority;
+    for(unsigned int i = 0; i < numSets; i++) {
+        delete[] cache_sets[i].cache_lines;
+        delete[] cache_sets[i].priority;
     }
-    delete cache_sets;
+    delete[] cache_sets;
 }
 
 bool Cache::isExist(unsigned set, unsigned tag, unsigned* index){
@@ -172,19 +182,28 @@ class CacheSimulator
             unsigned l1cache_size, unsigned l1cache_ways, unsigned l1cache_cycles,
             unsigned l2cache_size, unsigned l2cache_ways, unsigned l2cache_cycles);
 	~CacheSimulator();
-	CacheSimulator(CacheSimulator const&)      = delete; // disable copy ctor
+	CacheSimulator(CacheSimulator const&)  = delete; // disable copy ctor
 	void operator=(CacheSimulator const&)  = delete; // disable = operator
 
-    static CacheSimulator& getInstance(unsigned mem_cycles, unsigned block_size, unsigned walloc_method,
+    static CacheSimulator* getInstance(unsigned mem_cycles, unsigned block_size, unsigned walloc_method,
             unsigned l1cache_size, unsigned l1cache_ways, unsigned l1cache_cycles,
-            unsigned l2cache_size, unsigned l2cache_ways, unsigned l2cache_cycles){
-
+            unsigned l2cache_size, unsigned l2cache_ways, unsigned l2cache_cycles, bool reset){
+    
 	  static CacheSimulator* instance = nullptr;
-      if ( instance == nullptr ) {
-        instance = new CacheSimulator(mem_cycles, block_size, walloc_method, l1cache_size, l1cache_ways, 
-            l1cache_cycles, l2cache_size, l2cache_ways, l2cache_cycles);
+      if(reset == 0){
+        if ( instance == nullptr ) {
+            instance = new CacheSimulator(mem_cycles, block_size, walloc_method, l1cache_size, l1cache_ways, 
+                l1cache_cycles, l2cache_size, l2cache_ways, l2cache_cycles);
+        }
+        return instance;
       }
-      return *instance;
+      else{
+        if(instance != nullptr){
+            delete instance;
+            instance = nullptr;
+        }
+      }
+      return instance;
     }
 
     void executeRead(std::string address);

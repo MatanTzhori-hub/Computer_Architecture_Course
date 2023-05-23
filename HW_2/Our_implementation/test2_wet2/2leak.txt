@@ -1,0 +1,15 @@
+==9954== Memcheck, a memory error detector
+==9954== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==9954== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==9954== Command: ./cacheSim ./test2/example2_trace --mem-cyc 200 --bsize 6 --wr-alloc 1 --l1-size 7 --l1-assoc 1 --l1-cyc 10 --l2-size 14 --l2-assoc 0 --l2-cyc 60
+==9954== 
+L1miss=0.424 L2miss=0.286 AccTimeAvg=59.697
+==9954== 
+==9954== HEAP SUMMARY:
+==9954==     in use at exit: 0 bytes in 0 blocks
+==9954==   total heap usage: 523 allocs, 523 frees, 103,616 bytes allocated
+==9954== 
+==9954== All heap blocks were freed -- no leaks are possible
+==9954== 
+==9954== For lists of detected and suppressed errors, rerun with: -s
+==9954== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
