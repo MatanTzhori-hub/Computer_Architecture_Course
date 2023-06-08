@@ -1,8 +1,8 @@
-==100772== Memcheck, a memory error detector
-==100772== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==100772== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
-==100772== Command: ./dflow_calc ./inputs/random/opcode25 ./inputs/random/test_example25 p0 p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19 p20 p21 p22 p23 p24 p25 p26 p27 p28 p29 p30 p31 p32 p33 p34 p35 p36 p37 p38 p39 p40 p41 p42 p43 p44 p45 p46 p47 p48 p49 d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 d11 d12 d13 d14 d15 d16 d17 d18 d19 d20 d21 d22 d23 d24 d25 d26 d27 d28 d29 d30 d31 d32 d33 d34 d35 d36 d37 d38 d39 d40 d41 d42 d43 d44 d45 d46 d47 d48 d49
-==100772== 
+==22654== Memcheck, a memory error detector
+==22654== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==22654== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==22654== Command: ./dflow_calc ./inputs/random/opcode25 ./inputs/random/test_example25 p0 p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19 p20 p21 p22 p23 p24 p25 p26 p27 p28 p29 p30 p31 p32 p33 p34 p35 p36 p37 p38 p39 p40 p41 p42 p43 p44 p45 p46 p47 p48 p49 d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 d11 d12 d13 d14 d15 d16 d17 d18 d19 d20 d21 d22 d23 d24 d25 d26 d27 d28 d29 d30 d31 d32 d33 d34 d35 d36 d37 d38 d39 d40 d41 d42 d43 d44 d45 d46 d47 d48 d49
+==22654== 
 Reading the opcodes latency info from ./inputs/random/opcode25 ... Got latency for 31 opcodes
 Reading the program file ./inputs/random/test_example25 ... Found 50 instructions
 getProgDepth()==46
@@ -106,12 +106,12 @@ getInstDeps(46)=={15,23}
 getInstDeps(47)=={43,34}
 getInstDeps(48)=={11,-1}
 getInstDeps(49)=={39,26}
-==100772== 
-==100772== HEAP SUMMARY:
-==100772==     in use at exit: 0 bytes in 0 blocks
-==100772==   total heap usage: 109 allocs, 109 frees, 90,752 bytes allocated
-==100772== 
-==100772== All heap blocks were freed -- no leaks are possible
-==100772== 
-==100772== For lists of detected and suppressed errors, rerun with: -s
-==100772== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==22654== 
+==22654== HEAP SUMMARY:
+==22654==     in use at exit: 0 bytes in 0 blocks
+==22654==   total heap usage: 73 allocs, 73 frees, 80,520 bytes allocated
+==22654== 
+==22654== All heap blocks were freed -- no leaks are possible
+==22654== 
+==22654== For lists of detected and suppressed errors, rerun with: -s
+==22654== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

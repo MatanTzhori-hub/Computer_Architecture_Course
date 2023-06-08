@@ -7,14 +7,16 @@
 
 #include "dflow_calc.h"
 #include <vector>
+#include <stdio.h>
 
 struct InstNode{
     int instNum;
     InstInfo instInfo;
     InstNode* p1;
     InstNode* p2;
+    long depthCycles;   // amount of cycles up until this instruction and included, based on its dependencies.
 
-    InstNode(int instNum, InstInfo instInfo, InstNode* p1, InstNode* p2):instNum(instNum), instInfo(instInfo), p1(p1), p2(p2){}
+    InstNode(int instNum, InstInfo instInfo, InstNode* p1, InstNode* p2):instNum(instNum), instInfo(instInfo), p1(p1), p2(p2), depthCycles(0){}
 };
 
 struct ExitNode{
@@ -48,7 +50,6 @@ class DepSim{
         int getInstDepth(int theInst);
         int getInstDeps(unsigned int theInst, int *src1DepInst, int *src2DepInst);
         int getProgDepth();
-
 };
 
 DepSim::DepSim(const unsigned int opsLatency[], const InstInfo progTrace[], unsigned int numOfInsts): theProg(progTrace), progLen(numOfInsts), opsLatency(), 
@@ -83,26 +84,30 @@ void DepSim::InsertInst(InstInfo info, int indx){
     if(lastInstDep[info.src1Idx] != -1){
         newNode->p1 = FindInstNode(lastInstDep[info.src1Idx]);
         RemoveParentFromExit(lastInstDep[info.src1Idx]);
+        newNode->depthCycles = newNode->p1->depthCycles;
     }
     if(lastInstDep[info.src2Idx] != -1){
         newNode->p2 = FindInstNode(lastInstDep[info.src2Idx]);
         RemoveParentFromExit(lastInstDep[info.src2Idx]);
+        if(newNode->p2->depthCycles > newNode->depthCycles){
+            newNode->depthCycles = newNode->p2->depthCycles;
+        }
     }
     if(newNode->p1 == nullptr && newNode->p2 == nullptr){
         newNode->p1 = entry;
+        newNode->p2 = entry;
     }
 
     instGraphRef.push_back(newNode);
+    newNode->depthCycles += opsLatency[newNode->instInfo.opcode];
     lastInstDep[info.dstIdx] = newNode->instNum;
 }
 
 InstNode* DepSim::FindInstNode(int instNum){
-    for(long unsigned int i = 0; i < instGraphRef.size(); i++){
-        if(instGraphRef[i]->instNum == instNum){
-            return instGraphRef[i];
-        }
+    if(instNum >= (int)progLen){
+        return nullptr;
     }
-    return nullptr;
+    return instGraphRef[instNum];
 }
 
 void DepSim::RemoveParentFromExit(int instNum){
@@ -120,20 +125,7 @@ int DepSim::getInstDepth(int theInst){
     }
 
     InstNode* startNode = FindInstNode(theInst);
-    int res = getInstDepthRecur(startNode);
-    return res - opsLatency[startNode->instInfo.opcode];
-}
-
-int DepSim::getInstDepthRecur(InstNode* curNode){
-    if(curNode == nullptr || curNode->instNum == ENTRY_ID){
-        return 0;
-    }
-
-    int left = getInstDepthRecur(curNode->p1);
-    int right = getInstDepthRecur(curNode->p2);
-
-    int max = (left >= right) ? left : right;
-    return max += opsLatency[curNode->instInfo.opcode];
+    return startNode->depthCycles - opsLatency[startNode->instInfo.opcode];
 }
 
 int DepSim::getInstDeps(unsigned int theInst, int *src1DepInst, int *src2DepInst){
