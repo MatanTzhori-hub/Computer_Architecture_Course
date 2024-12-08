@@ -16,10 +16,9 @@ update its state based on the actual instruction identification and the actual b
 
 2. **`Memory Cache Simulator:`**
 In this exercise, we implemented a cache memory simulator. The cache memory configuration is flexible and defined at the start of the run using parameters.
-The simulator receives an input file detailing memory accesses in the following format:
-w 0x1ff91ca8
-r 0x20000cdc
-..
+The simulator receives an input file detailing memory accesses in the following format:  
+w 0x1ff91ca8  
+r 0x20000cdc  
 The simulator calculates the Hit/Miss rate and the average memory access time for the specified configuration and the given input file.
 
 
